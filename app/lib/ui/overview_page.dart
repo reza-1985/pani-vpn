@@ -446,7 +446,7 @@ class _DesktopHome extends StatelessWidget {
           textAlign: TextAlign.center,
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w800,
-            color: on ? accent : p.text,
+            color: confirming ? p.busy : (on ? accent : p.text),
           ),
         ),
         const SizedBox(height: 8),
@@ -1013,7 +1013,7 @@ class _HomePalette {
     cardBorder: Color(0x14FFFFFF),
     idle: Color(0xFF9059FF),
     connected: Color(0xFFFF7139),
-    busy: Midnight.busy,
+    busy: Color(0xFF9059FF),
     error: Midnight.error,
     second: Color(0xFFFF4F5E),
     third: Color(0xFF9059FF),
@@ -1031,7 +1031,7 @@ class _HomePalette {
     cardBorder: Color(0x12202A66),
     idle: Color(0xFF6A5CF0),
     connected: Color(0xFFFF7139),
-    busy: Color(0xFFF08C00),
+    busy: Color(0xFF9059FF),
     error: Color(0xFFE5484D),
     second: Color(0xFF38B6FF),
     third: Color(0xFFFF7EB6),
@@ -1276,7 +1276,7 @@ class _PhoneHome extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
-                  color: on ? accent : p.text,
+                  color: connecting ? p.busy : (on ? accent : p.text),
                 ),
               ),
               const SizedBox(height: 8),
@@ -1967,7 +1967,7 @@ class _PowerOrb extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: on
+                  colors: (busy || connecting) ? const [Color(0xFF9059FF), Color(0xFFB833E1)] : on
                       ? const [Color(0xFFFF7139), Color(0xFFFF4F5E)]
                       : p.discOff,
                 ),
