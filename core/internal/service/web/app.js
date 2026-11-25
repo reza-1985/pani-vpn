@@ -1354,7 +1354,7 @@ async function saveBackup() {
       try { data = await response.json(); } catch { /* empty body */ }
       throw new ApiError(response.status, (data && data.error) || response.statusText);
     }
-    const name = /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") || "")?.[1] || "Arman-VPN-backup.zip";
+    const name = /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") || "")?.[1] || "pani-vpn-backup.zip";
     const url = URL.createObjectURL(await response.blob());
     const link = el("a", { href: url, download: name });
     document.body.append(link);
