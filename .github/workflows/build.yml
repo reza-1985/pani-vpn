@@ -80,11 +80,11 @@ jobs:
               )
           EOF
       - name: Release key
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
+          if [ -z "$KEYSTORE_B64" ]; then exit 0; fi
           echo "$KEYSTORE_B64" | base64 -d > app/android/release.jks
           { echo "storePassword=$KEYSTORE_PASS"; echo "keyPassword=$KEYSTORE_PASS"; echo "keyAlias=release"; echo "storeFile=${{ github.workspace }}/app/android/release.jks"; } > app/android/key.properties
       - name: Build Android APK
