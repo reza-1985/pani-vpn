@@ -41,9 +41,9 @@ jobs:
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$ndk" > /dev/null
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/$ndk" >> "$GITHUB_ENV"
           go install "golang.org/x/mobile/cmd/gomobile@$GOMOBILE_VERSION" "golang.org/x/mobile/cmd/gobind@$GOMOBILE_VERSION"
-   - name: Generate Android icons
+      - name: Generate Android icons
         run: |
-        python3 -c "import PIL" 2>/dev/null || python3 -m pip install --break-system-packages --quiet pillow
+          python3 -c "import PIL" 2>/dev/null || python3 -m pip install --break-system-packages --quiet pillow
           python3 - << 'EOF'
           import os
           from PIL import Image
@@ -79,7 +79,7 @@ jobs:
                   os.path.join(folder, "ic_launcher_background.png"), optimize=True
               )
           EOF  
-   - name: Build Android APK
+      - name: Build Android APK
         run: |
           v="$(sed -n 's/^version:[[:space:]]*\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' app/pubspec.yaml)"
           mkdir -p app/android/app/libs
