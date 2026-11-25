@@ -1,6 +1,6 @@
 "use strict";
 
-// Arman VPN dashboard. All server data is rendered with textContent; no
+// Pani VPN dashboard. All server data is rendered with textContent; no
 // response value is ever interpreted as HTML.
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -374,7 +374,7 @@ function showView(name) {
   $("#page-title").textContent = title;
   $("#page-sub").textContent = sub;
   $("#page-sub").hidden = !sub;
-  document.title = `${title} · Arman VPN`;
+  document.title = `${title} · Pani VPN`;
   if (name === "settings") loadSettings().catch(reportError);
   if (name === "accounts") loadAccounts().catch(reportError);
   if (name === "locations") loadLocations().catch(reportError);
@@ -477,7 +477,7 @@ function renderStatus() {
   const phase = s.state.phase;
   const label = PHASE_LABELS[phase] || phase;
 
-  $("#version-tag").textContent = s.version ? `Arman VPN ${s.version}` : "";
+  $("#version-tag").textContent = s.version ? `Pani VPN ${s.version}` : "";
   const pill = $("#state-pill");
   const asleep = phase === "running" && s.proxy && s.proxy.sleeping_since;
   // A sleeping proxy has its own look everywhere: it is not connected.
@@ -811,10 +811,10 @@ async function renderHelp() {
   const hostPart = host.includes(":") ? `[${host}]` : host;
   const address = `${hostPart}:${port}`;
   const userinfo = base64(`${proxy.username || ""}:${proxy.password || ""}`).replace(/=+$/, "");
-  const link = `socks://${userinfo}@${address}#${encodeURIComponent("Arman VPN")}`;
+  const link = `socks://${userinfo}@${address}#${encodeURIComponent("Pani VPN")}`;
   $("#help-socks-addr").textContent = address;
   // The password stays out of sight; the copied link has it.
-  $("#help-socks-link").textContent = proxy.password ? `socks://…@${address}#Arman VPN` : `socks://${userinfo}@${address}#Arman VPN`;
+  $("#help-socks-link").textContent = proxy.password ? `socks://…@${address}#Pani VPN` : `socks://${userinfo}@${address}#Pani VPN`;
   $("#help-copy-addr").onclick = () => copyText(address);
   $("#help-copy-link").onclick = () => copyText(link, "the link");
 }
@@ -1292,7 +1292,7 @@ function renderSignIn(view) {
       // browser sign-in, moved over by its data folder.
       if (view.error_code === "blocked") {
         message.replaceChildren(
-          el("span", { text: "Tip: sign in with the browser in the Arman VPN app, then copy that device's data folder to this machine." }),
+          el("span", { text: "Tip: sign in with the browser in the Pani VPN app, then copy that device's data folder to this machine." }),
           el("a", {
             class: "btn primary",
             style: "margin-top:10px; width:fit-content",
