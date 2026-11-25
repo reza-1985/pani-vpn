@@ -79,11 +79,20 @@ jobs:
                   os.path.join(folder, "ic_launcher_background.png"), optimize=True
               )
           EOF
+      - name: Release key
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 -d > app/android/release.jks
+          { echo "storePassword=$KEYSTORE_PASS"; echo "keyPassword=$KEYSTORE_PASS"; echo "keyAlias=release"; echo "storeFile=${{ github.workspace }}/app/android/release.jks"; } > app/android/key.properties
       - name: Build Android APK
         run: |
           v="$(sed -n 's/^version:[[:space:]]*\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' app/pubspec.yaml)"
           mkdir -p app/android/app/libs
           flags="-s -w -X github.com/armanlife/arman-vpn-client/core/internal/version.Current=$v"
+          cp app/assets/logo.png core/internal/service/web/logo.png
           (cd core && gomobile bind -target=android -androidapi 24 -trimpath \
             -ldflags "$flags" \
             -o ../app/android/app/libs/core.aar ./mobile)
@@ -96,6 +105,9 @@ jobs:
           done
           flutter build apk --release --dart-define=APP_VERSION=$v
           cp build/app/outputs/flutter-apk/app-release.apk ../out/Pani-VPN-Android-universal.apk
+      - name: Remove the key
+        if: always()
+        run: rm -f app/android/release.jks app/android/key.properties
       - uses: actions/upload-artifact@v7
         with:
           name: Pani-VPN-Android
