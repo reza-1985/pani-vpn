@@ -90,14 +90,14 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    l.welcomeTitle,
+                    'Pani VPN',
                     textAlign: TextAlign.center,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  Text('پانی اتصالی امن به دنیا آزاد', textAlign: TextAlign.center, style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.secondary, fontWeight: FontWeight.w500),), const SizedBox(height: 8), Text(
                     l.welcomeBody,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
