@@ -22,3 +22,10 @@
 - پشتیبانی از TLS Fragmentation، پراکسی SOCKS5 و سرور رله
 - DNS رمزنگاری‌شده (DNS over HTTPS)
 - رابط کاربری چندزبانه همراه با تم روشن و تاریک
+---
+
+## Credits & License
+
+**Pani VPN** is a customized version based on the open-source project [`armanlife/arman-vpn-client`](https://github.com/armanlife/arman-vpn-client), licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
+
+This is an independent, unofficial project and has no affiliation with Mozilla.
