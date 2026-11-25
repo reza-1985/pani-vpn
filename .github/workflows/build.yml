@@ -78,7 +78,7 @@ jobs:
               Image.new("RGBA", (adaptive_px, adaptive_px), bg_color).save(
                   os.path.join(folder, "ic_launcher_background.png"), optimize=True
               )
-          EOF  
+        EOF  
       - name: Build Android APK
         run: |
           v="$(sed -n 's/^version:[[:space:]]*\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' app/pubspec.yaml)"
