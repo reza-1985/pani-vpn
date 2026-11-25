@@ -1241,13 +1241,13 @@ class _PhoneHome extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const AppLogo(size: 28),
+                  const AppLogo(size: 44),
                   const SizedBox(width: 8), Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                   Text(
                     l.appTitle,
                     style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: p.text,),),Text('پانی اتصالی امن به دنیای آزاد', style: theme.textTheme.labelSmall?.copyWith(color: p.muted.withValues(alpha: 0.85), fontSize: 10.5, fontWeight: FontWeight.w400)),]),
+                      fontSize: 21, fontWeight: FontWeight.w700,
+                      color: p.text,),),Text('پانی اتصالی امن به دنیای آزاد', style: theme.textTheme.labelSmall?.copyWith(color: p.muted.withValues(alpha: 0.95), fontSize: 13, fontWeight: FontWeight.w500)),]),
                 ],
               ),
               const Spacer(),
