@@ -967,7 +967,7 @@ void main() {
     await tester.pumpWidget(VpnApp(core: core, settings: settings));
     core.start();
     await tester.pumpAndSettle();
-    expect(find.text('Welcome'), findsOneWidget);
+    expect(find.text('Pani VPN'), findsOneWidget);
 
     // Persian brings Iran's routing with it.
     await tester.tap(find.text('English'));
