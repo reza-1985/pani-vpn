@@ -97,7 +97,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text('پانی اتصالی امن به دنیا آزاد', textAlign: TextAlign.center, style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.secondary, fontWeight: FontWeight.w500),), const SizedBox(height: 8), Text(
+                  Text('پانی اتصالی امن به دنیای آزاد', textAlign: TextAlign.center, style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.secondary, fontWeight: FontWeight.w500),), const SizedBox(height: 8), Text(
                     l.welcomeBody,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
