@@ -118,3 +118,41 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: v="$(sed -n 's/^version:[[:space:]]*\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' app/pubspec.yaml)"; if gh release view "v$v" >/dev/null 2>&1; then gh release upload "v$v" out/*.apk --clobber; else gh release create "v$v" out/*.apk --title "v$v" --generate-notes; fi
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: core/go.mod
+          cache-dependency-path: core/go.sum
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - name: Install Inno Setup
+        run: choco upgrade innosetup -y --no-progress
+      - name: Generate Windows icons and web assets
+        run: |
+          python -c "import PIL" 2>$null; if ($LASTEXITCODE -ne 0) { python -m pip install --quiet pillow }
+          python -c "from PIL import Image; img = Image.open('app/assets/logo.png').convert('RGBA'); img.save('app/windows/runner/resources/app_icon.ico', format='ICO', sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])"
+          Copy-Item app/assets/logo.png core/internal/service/web/logo.png -Force
+          Copy-Item app/assets/logo.png core/internal/service/web/icon.png -Force
+      - name: Build Windows
+        run: ./scripts/build-windows.ps1
+      - name: Prepare output files
+        run: |
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          Copy-Item dist/*Windows-x64.zip out/Pani-VPN-Windows-x64.zip -Force
+          Copy-Item dist/*Windows-Setup-x64.exe out/Pani-VPN-Windows-Setup-x64.exe -Force
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Pani-VPN-Windows
+          path: out/*
+          if-no-files-found: error
+      - name: Publish to Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: v="$(sed -n 's/^version:[[:space:]]*\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' app/pubspec.yaml)"; if gh release view "v$v" >/dev/null 2>&1; then gh release upload "v$v" out/* --clobber; else gh release create "v$v" out/* --title "v$v" --generate-notes || gh release upload "v$v" out/* --clobber; fi
