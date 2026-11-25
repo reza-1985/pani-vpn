@@ -93,7 +93,7 @@ jobs:
           mkdir -p app/android/app/libs
           flags="-s -w -X github.com/armanlife/arman-vpn-client/core/internal/version.Current=$v"
           cp app/assets/logo.png core/internal/service/web/logo.png
-        cp app/assets/logo.png core/internal/service/web/icon.png
+          cp app/assets/logo.png core/internal/service/web/icon.png
           (cd core && gomobile bind -target=android -androidapi 24 -trimpath \
             -ldflags "$flags" \
             -o ../app/android/app/libs/core.aar ./mobile)
