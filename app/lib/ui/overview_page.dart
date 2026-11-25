@@ -1011,13 +1011,13 @@ class _HomePalette {
     muted: Midnight.muted,
     card: Color(0x10FFFFFF),
     cardBorder: Color(0x14FFFFFF),
-    idle: Midnight.idle,
-    connected: Midnight.connected,
+    idle: Color(0xFF9059FF),
+    connected: Color(0xFFFF7139),
     busy: Midnight.busy,
     error: Midnight.error,
-    second: Color(0xFF2EA8FF),
-    third: Color(0xFFB45CFF),
-    discOff: [Color(0xFF262E5A), Color(0xFF161C3C)],
+    second: Color(0xFFFF4F5E),
+    third: Color(0xFF9059FF),
+    discOff: [Color(0xFF2A2F4F), Color(0xFF9059FF)],
     discOffEdge: Color(0x1FFFFFFF),
   );
 
@@ -1030,12 +1030,12 @@ class _HomePalette {
     card: Color(0xD9FFFFFF),
     cardBorder: Color(0x12202A66),
     idle: Color(0xFF6A5CF0),
-    connected: Color(0xFF0DB37C),
+    connected: Color(0xFFFF7139),
     busy: Color(0xFFF08C00),
     error: Color(0xFFE5484D),
     second: Color(0xFF38B6FF),
     third: Color(0xFFFF7EB6),
-    discOff: [Colors.white, Color(0xFFF0F2FF)],
+    discOff: [Color(0xFF2A2F4F), Color(0xFF9059FF)],
     discOffEdge: Color(0x336A5CF0),
   );
 }
@@ -1242,14 +1242,12 @@ class _PhoneHome extends StatelessWidget {
               Row(
                 children: [
                   const AppLogo(size: 28),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 8), Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                   Text(
                     l.appTitle,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: p.text,
-                    ),
-                  ),
+                      color: p.text,),),Text('پانی اتصالی امن به دنیای آزاد', style: theme.textTheme.labelSmall?.copyWith(color: p.muted.withValues(alpha: 0.85), fontSize: 10.5, fontWeight: FontWeight.w400)),]),
                 ],
               ),
               const Spacer(),
@@ -1829,7 +1827,7 @@ class _HomeDelay extends StatelessWidget {
     final (text, color) = switch (test) {
       null => (l.testConnection, palette.muted),
       final t when !t.ok => (l.testFailed, palette.error),
-      final t => (l.milliseconds(t.responseMs), delayColor(t.responseMs)),
+      final t => (l.milliseconds(t.responseMs), t.responseMs < 300 ? const Color(0xFFFF7139) : t.responseMs < 700 ? const Color(0xFFFF4F5E) : palette.error),
     };
     return Tooltip(
       message: '${l.realDelay} · ${l.testConnection}',
@@ -1970,7 +1968,7 @@ class _PowerOrb extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: on
-                      ? [Color.lerp(accent, Colors.white, 0.28)!, accent]
+                      ? const [Color(0xFFFF7139), Color(0xFFFF4F5E)]
                       : p.discOff,
                 ),
                 border: Border.all(
@@ -2230,7 +2228,7 @@ class _Contours extends CustomPainter {
             : path.lineTo(point.dx, point.dy);
       }
       path.close();
-      paint.color = color.withValues(alpha: alpha * (1 - i / lines));
+      paint.color = Color.lerp(const Color(0xFF9059FF), const Color(0xFFFF7139), i / (lines - 1))!.withValues(alpha: alpha * (1 - i / lines));
       canvas.drawPath(path, paint);
     }
   }
