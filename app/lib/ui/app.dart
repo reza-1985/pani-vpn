@@ -120,7 +120,7 @@ class VpnApp extends StatelessWidget {
           ),
         );
       },
-      home: Shell(core: core, settings: settings),
+      home: _SplashWrapper(child: Shell(core: core, settings: settings)),
     ),
   );
 }
@@ -526,4 +526,175 @@ class _NoCore extends StatelessWidget {
       ),
     );
   }
+}
+class _SplashWrapper extends StatefulWidget {
+const _SplashWrapper({required this.child});
+final Widget child;
+
+@override
+State<_SplashWrapper> createState() => _SplashWrapperState();
+}
+
+class _SplashWrapperState extends State<_SplashWrapper>
+with SingleTickerProviderStateMixin {
+late final AnimationController _controller;
+late final Animation<double> _fadeAnimation;
+late final Animation<double> _scaleAnimation;
+bool _showSplash = true;
+bool _splashDone = false;
+
+@override
+void initState() {
+super.initState();
+_controller = AnimationController(
+vsync: this,
+duration: const Duration(milliseconds: 800),
+);
+_fadeAnimation = CurvedAnimation(
+parent: _controller,
+curve: Curves.easeOut,
+);
+_scaleAnimation = Tween<double>(begin: 0.82, end: 1.0).animate(
+CurvedAnimation(
+parent: _controller,
+curve: Curves.easeOutCubic,
+),
+);
+_controller.forward();
+Future.delayed(const Duration(milliseconds: 1650), () {
+if (mounted) {
+setState(() {
+_showSplash = false;
+});
+}
+});
+}
+
+@override
+void dispose() {
+_controller.dispose();
+super.dispose();
+}
+
+@override
+Widget build(BuildContext context) {
+return Stack(
+children: [
+widget.child,
+if (!_splashDone)
+Positioned.fill(
+child: IgnorePointer(
+ignoring: !_showSplash,
+child: AnimatedOpacity(
+opacity: _showSplash ? 1.0 : 0.0,
+duration: const Duration(milliseconds: 450),
+curve: Curves.easeInOut,
+onEnd: () {
+if (!_showSplash && mounted) {
+setState(() {
+_splashDone = true;
+});
+}
+},
+child: _SplashContent(
+fadeAnimation: _fadeAnimation,
+scaleAnimation: _scaleAnimation,
+),
+),
+),
+),
+],
+);
+}
+}
+
+class _SplashContent extends StatelessWidget {
+const _SplashContent({
+required this.fadeAnimation,
+required this.scaleAnimation,
+});
+
+final Animation<double> fadeAnimation;
+final Animation<double> scaleAnimation;
+
+@override
+Widget build(BuildContext context) {
+return Material(
+color: const Color(0xFF161829),
+child: Center(
+child: FadeTransition(
+opacity: fadeAnimation,
+child: ScaleTransition(
+scale: scaleAnimation,
+child: Column(
+mainAxisSize: MainAxisSize.min,
+children: [
+Container(
+width: 220,
+height: 220,
+decoration: BoxDecoration(
+shape: BoxShape.circle,
+gradient: RadialGradient(
+colors: [
+const Color(0xFFFF7139).withValues(alpha: 0.26),
+const Color(0xFF9059FF).withValues(alpha: 0.18),
+const Color(0xFF161829).withValues(alpha: 0.0),
+],
+stops: const [0.15, 0.55, 1.0],
+),
+),
+alignment: Alignment.center,
+child: Container(
+decoration: BoxDecoration(
+shape: BoxShape.circle,
+boxShadow: [
+BoxShadow(
+color: const Color(0xFFFF7139).withValues(alpha: 0.25),
+blurRadius: 42,
+spreadRadius: 4,
+),
+BoxShadow(
+color: const Color(0xFF9059FF).withValues(alpha: 0.22),
+blurRadius: 56,
+spreadRadius: 8,
+),
+],
+),
+child: Image.asset(
+'assets/logo.png',
+width: 140,
+height: 140,
+fit: BoxFit.contain,
+),
+),
+),
+const SizedBox(height: 20),
+const Text(
+'Pani VPN',
+style: TextStyle(
+color: Colors.white,
+fontSize: 28,
+fontWeight: FontWeight.w700,
+letterSpacing: 0.8,
+),
+),
+const SizedBox(height: 10),
+Text(
+'پانی اتصالی امن به دنیای آزاد',
+textDirection: TextDirection.rtl,
+textAlign: TextAlign.center,
+style: TextStyle(
+color: Colors.white.withValues(alpha: 0.82),
+fontSize: 15.5,
+fontWeight: FontWeight.w500,
+fontFamily: 'Vazirmatn',
+),
+),
+],
+),
+),
+),
+),
+);
+}
 }
