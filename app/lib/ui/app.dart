@@ -24,7 +24,7 @@ import 'widgets.dart';
 
 ThemeData _theme(Brightness brightness, Locale locale) {
   final scheme = ColorScheme.fromSeed(
-    seedColor: const Color(0xFF5B5BD6),
+    seedColor: const Color(0xFF2E9599), primary: brightness == Brightness.dark ? const Color(0xFF52B7B9) : const Color(0xFF2E9599), secondary: brightness == Brightness.dark ? const Color(0xFF5C7FA3) : const Color(0xFF2C4A6B),
     brightness: brightness,
   );
   final dark = brightness == Brightness.dark;
@@ -36,7 +36,7 @@ ThemeData _theme(Brightness brightness, Locale locale) {
     fontFamily: font,
     scaffoldBackgroundColor: dark
         ? const Color(0xFF111218)
-        : const Color(0xFFF5F5FA),
+        : const Color(0xFFF7F8FA),
     cardTheme: CardThemeData(
       elevation: 0,
       color: dark ? const Color(0xFF1A1B23) : Colors.white,
@@ -95,7 +95,7 @@ class VpnApp extends StatelessWidget {
     listenable: settings,
     builder: (context, _) => MaterialApp(
       navigatorKey: navigatorKey,
-      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+      onGenerateTitle: (context) => 'Pani VPN',
       debugShowCheckedModeBanner: false,
       locale: settings.locale,
       supportedLocales: AppLocalizations.supportedLocales,
