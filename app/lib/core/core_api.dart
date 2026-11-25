@@ -558,7 +558,7 @@ class CoreApi {
       final disposition = res.headers.value('content-disposition') ?? '';
       final name =
           RegExp(r'filename="([^"]+)"').firstMatch(disposition)?.group(1) ??
-          'Arman-VPN-backup.zip';
+          'pani-vpn-backup.zip';
       return (name: name, bytes: bytes);
     } on SocketException catch (e) {
       throw CoreUnavailable(
