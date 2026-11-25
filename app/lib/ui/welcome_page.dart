@@ -83,11 +83,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(
-                    Icons.shield_rounded,
-                    size: 56,
-                    color: theme.colorScheme.primary,
-                  ),
+                Center(child: ClipRRect(borderRadius: BorderRadius.circular(18), child: const AppLogo(size: 74))),
                   const SizedBox(height: 16),
                   Text(
                     'Pani VPN',
