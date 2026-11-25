@@ -41,7 +41,45 @@ jobs:
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$ndk" > /dev/null
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/$ndk" >> "$GITHUB_ENV"
           go install "golang.org/x/mobile/cmd/gomobile@$GOMOBILE_VERSION" "golang.org/x/mobile/cmd/gobind@$GOMOBILE_VERSION"
-      - name: Build Android APK
+   - name: Generate Android icons
+        run: |
+        python3 -c "import PIL" 2>/dev/null || python3 -m pip install --break-system-packages --quiet pillow
+          python3 - << 'EOF'
+          import os
+          from PIL import Image
+
+          logo = Image.open("app/assets/logo.png").convert("RGBA")
+          res_dir = "app/android/app/src/main/res"
+          densities = {
+              "mipmap-mdpi": 1.0,
+              "mipmap-hdpi": 1.5,
+              "mipmap-xhdpi": 2.0,
+              "mipmap-xxhdpi": 3.0,
+              "mipmap-xxxhdpi": 4.0,
+          }
+
+          corner = logo.getpixel((0, 0))
+          bg_color = corner if corner[3] > 0 else (0, 0, 0, 255)
+
+          for folder_name, scale in densities.items():
+              folder = os.path.join(res_dir, folder_name)
+              os.makedirs(folder, exist_ok=True)
+              launcher_px = round(48 * scale)
+              adaptive_px = round(108 * scale)
+              fg_px = round(72 * scale)
+              logo.resize((launcher_px, launcher_px), Image.LANCZOS).save(
+                  os.path.join(folder, "ic_launcher.png"), optimize=True
+              )
+              fg_canvas = Image.new("RGBA", (adaptive_px, adaptive_px), (0, 0, 0, 0))
+              fg_logo = logo.resize((fg_px, fg_px), Image.LANCZOS)
+              offset = (adaptive_px - fg_px) // 2
+              fg_canvas.alpha_composite(fg_logo, (offset, offset))
+              fg_canvas.save(os.path.join(folder, "ic_launcher_foreground.png"), optimize=True)
+              Image.new("RGBA", (adaptive_px, adaptive_px), bg_color).save(
+                  os.path.join(folder, "ic_launcher_background.png"), optimize=True
+              )
+          EOF  
+   - name: Build Android APK
         run: |
           v="$(sed -n 's/^version:[[:space:]]*\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' app/pubspec.yaml)"
           mkdir -p app/android/app/libs
