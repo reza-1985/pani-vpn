@@ -20,9 +20,9 @@
 ; itself and installs the service in Program Files; the uninstall removes it
 ; again.
 
-#define AppName "Arman VPN"
+#define AppName "Pani VPN"
 #define AppExe "arman-vpn.exe"
-#define AppDir "Arman VPN"
+#define AppDir "Pani VPN"
 #ifndef AppVersion
   #define AppVersion "0.0.0"
 #endif
