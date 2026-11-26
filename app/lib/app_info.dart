@@ -23,12 +23,12 @@ const githubRepo = 'reza-1985/pani-vpn';
 const updateManifestUrl = String.fromEnvironment(
   'UPDATE_MANIFEST_URL',
   defaultValue:
-      'https://raw.githubusercontent.com/arman-org/update-manifests/main/arman-vpn-client/updates.json',
+      'https://raw.githubusercontent.com/reza-1985/pani-vpn/main/.github/updates.json',
 );
 const updateManifestMirror = String.fromEnvironment(
   'UPDATE_MANIFEST_MIRROR',
   defaultValue:
-      'https://cdn.jsdelivr.net/gh/arman-org/update-manifests@main/arman-vpn-client/updates.json',
+      'https://cdn.jsdelivr.net/gh/reza-1985/pani-vpn@main/.github/updates.json',
 );
 
 /// A release server used instead of GitHub, to try updates with a local
