@@ -2,5 +2,31 @@
   "android": "1.0.23",
   "linux": "1.0.19",
   "macos": "1.0.19",
-  "windows": "1.0.23"
+  "windows": "1.0.23",
+  "downloads": {
+    "arm64-v8a": {
+      "file": "Pani-VPN-Android-arm64-v8a.apk",
+      "url": "https://github.com/reza-1985/pani-vpn/releases/download/v1.0.23/Pani-VPN-Android-arm64-v8a.apk"
+    },
+    "armeabi-v7a": {
+      "file": "Pani-VPN-Android-armeabi-v7a.apk",
+      "url": "https://github.com/reza-1985/pani-vpn/releases/download/v1.0.23/Pani-VPN-Android-armeabi-v7a.apk"
+    },
+    "x86_64": {
+      "file": "Pani-VPN-Android-x86_64.apk",
+      "url": "https://github.com/reza-1985/pani-vpn/releases/download/v1.0.23/Pani-VPN-Android-x86_64.apk"
+    },
+    "universal": {
+      "file": "Pani-VPN-Android-universal.apk",
+      "url": "https://github.com/reza-1985/pani-vpn/releases/download/v1.0.23/Pani-VPN-Android-universal.apk"
+    },
+    "installer-x64": {
+      "file": "Pani-VPN-Windows-Setup-x64.exe",
+      "url": "https://github.com/reza-1985/pani-vpn/releases/download/v1.0.23/Pani-VPN-Windows-Setup-x64.exe"
+    },
+    "archive-x64": {
+      "file": "Pani-VPN-Windows-x64.zip",
+      "url": "https://github.com/reza-1985/pani-vpn/releases/download/v1.0.23/Pani-VPN-Windows-x64.zip"
+    }
+  }
 }
