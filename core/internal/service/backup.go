@@ -92,7 +92,7 @@ func (d *Daemon) writeBackup(w io.Writer) error {
 	}
 	zw := zip.NewWriter(w)
 	info, _ := json.MarshalIndent(backupInfo{
-		App:      "Arman VPN",
+		App:      "Pani VPN",
 		Format:   backupFormat,
 		Version:  version.Current,
 		Created:  time.Now().UTC().Truncate(time.Second),
