@@ -82,10 +82,8 @@ String windowsName({required bool installed}) =>
 /// [releaseUrl] (".../releases/tag/v1.2.3"): its versioned name, so the
 /// downloaded file says which version it is.
 String releaseFileUrl(String releaseUrl, String name) {
-  final tag = releaseUrl.substring(releaseUrl.lastIndexOf('/') + 1);
-  final version = tag.replaceFirst(RegExp('^[vV]'), '');
   return '${releaseUrl.replaceFirst('/releases/tag/', '/releases/download/')}'
-      '/Arman-VPN-$version-$name';
+      '/Pani-VPN-$name';
 }
 
 /// The APK for processor [abi] in the release whose page is [releaseUrl].
