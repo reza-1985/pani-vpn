@@ -256,8 +256,8 @@ Future<Release?> _latestRelease(
     };
     final downloads = <String, Object?>{};
     for (final entry in parts.entries) {
-      final fixed = 'Arman-VPN-${entry.value}';
-      final versioned = 'Arman-VPN-$version-${entry.value}';
+      final fixed = 'Pani-VPN-${entry.value}';
+      final versioned = 'Pani-VPN-$version-${entry.value}';
       final file = assets.containsKey(fixed) ? fixed : versioned;
       if (assets.containsKey(file)) {
         downloads[entry.key] = {'file': file, 'url': assets[file]};
