@@ -430,7 +430,7 @@ class CoreService : VpnService() {
             Notification.Builder(this)
         }
         return builder
-            .setSmallIcon(R.drawable.ic_stat_logo)
+            .setSmallIcon(R.drawable.ic_stat_pani)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(text)
             .setStyle(Notification.BigTextStyle().bigText(text))
