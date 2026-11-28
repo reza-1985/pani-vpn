@@ -35,20 +35,20 @@ ThemeData _theme(Brightness brightness, Locale locale) {
     colorScheme: scheme,
     fontFamily: font,
     scaffoldBackgroundColor: dark
-        ? const Color(0xFF161829)
+        ? const Color(0xFF111322)
         : const Color(0xFFF8F7FC),
     cardTheme: CardThemeData(
       elevation: 0,
-      color: dark ? const Color(0xFF22263D) : Colors.white,
+      color: dark ? const Color(0xFF191C32) : Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: scheme.outlineVariant.withValues(alpha: 0.4)),
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: dark ? Colors.white.withValues(alpha: 0.08) : scheme.outlineVariant.withValues(alpha: 0.4)),
       ),
     ),
   );
   return theme.copyWith(
     navigationRailTheme: NavigationRailThemeData(
-      backgroundColor: dark ? const Color(0xFF1B1E32) : const Color(0xFFF1EFFA),
+      backgroundColor: dark ? const Color(0xFF14172A) : const Color(0xFFF1EFFA),
       // NavigationRail replaces DefaultTextStyle, so retain the resolved
       // platform font instead of letting a null family choose a fallback.
       selectedLabelTextStyle: theme.textTheme.labelLarge!.copyWith(
