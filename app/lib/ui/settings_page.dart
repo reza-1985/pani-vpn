@@ -223,17 +223,38 @@ class SettingsGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+final isDark = theme.brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(8, 20, 8, 8),
-          child: Text(
-            title,
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
+     child: Row(
+children: [
+if (isDark)
+Container(
+width: 4,
+height: 14,
+margin: const EdgeInsetsDirectional.only(end: 8),
+decoration: BoxDecoration(
+color: const Color(0xFFFF7139),
+borderRadius: BorderRadius.circular(2),
+),
+),
+Expanded(
+child: Text(
+title,
+style: theme.textTheme.labelLarge?.copyWith(
+color: isDark
+? const Color(0xFFFF7139)
+: theme.colorScheme.primary,
+fontWeight: isDark ? FontWeight.w700 : null,
+letterSpacing: isDark ? 0.3 : null,
+),
+),
+),
+],
+),
         ),
         Card(
           margin: EdgeInsets.zero,
