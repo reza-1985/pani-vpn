@@ -15,6 +15,7 @@ import '../core/ports.dart';
 import '../l10n/app_localizations.dart';
 import '../platform.dart';
 import 'browser_signin.dart';
+import 'about_pani_dialog.dart';
 import 'bypass_apps_page.dart';
 import 'connection_mode.dart';
 import 'format.dart';
@@ -24,7 +25,7 @@ import 'widgets.dart';
 /// The home page: the switch, the state, where the traffic goes, and the
 /// data used; the phone's (_PhoneHome) and the computer's (_DesktopHome)
 /// share the look, not the logic. Developer mode adds the details.
-class OverviewPage extends StatelessWidget {
+class OverviewPage extends StatefulWidget {
   const OverviewPage({
     super.key,
     required this.core,
@@ -52,9 +53,33 @@ class OverviewPage extends StatelessWidget {
   final VoidCallback? onOpenUpstreamProxy;
 
   @override
+State<OverviewPage> createState() => _OverviewPageState();
+}
+
+class _OverviewPageState extends State<OverviewPage> {
+bool _wasConnected = false;
+
+  @override
   Widget build(BuildContext context) {
+    final core = widget.core;
+final settings = widget.settings;
+final phone = widget.phone;
+final onOpenServers = widget.onOpenServers;
+final onOpenAccounts = widget.onOpenAccounts;
+final onOpenConnection = widget.onOpenConnection;
+final onOpenUpstreamProxy = widget.onOpenUpstreamProxy;
     final status = core.status!;
     final showIp = settings.showPublicIp;
+    final running = status.state.phase == Phase.running;
+final confirming = status.connectPending || (status.proxyOn && running && !status.confirmedBy(core.lastTest));
+final connected = status.proxyOn && running && !confirming;
+if (connected && !_wasConnected) {
+WidgetsBinding.instance.addPostFrameCallback((_) {
+if (!mounted) return;
+unawaited(core.runTest().catchError((_) {}));
+});
+}
+_wasConnected = connected;
     if (phone) {
       return _PhoneHome(
         core: core,
@@ -437,7 +462,7 @@ class _DesktopHome extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Text(
+    AnimatedOpacity(opacity: (connected && !core.switchingProxy && !(confirming || status.state.phase == Phase.starting)) ? 0.0 : 1.0, duration: const Duration(milliseconds: 450), child:     Text(
           confirming
               ? l.stateConnecting
               : connected
@@ -447,7 +472,7 @@ class _DesktopHome extends StatelessWidget {
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w800,
             color: confirming ? p.busy : (on ? accent : p.text),
-          ),
+          )),
         ),
         const SizedBox(height: 8),
         if (connected)
@@ -1237,7 +1262,7 @@ class _PhoneHome extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const AppLogo(size: 44),
+                  GestureDetector(onTap: () => showAboutPaniDialog(context), child: const AppLogo(size: 44)),
                   const SizedBox(width: 8), Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                   Text(
                     l.appTitle,
@@ -1268,14 +1293,14 @@ class _PhoneHome extends StatelessWidget {
                 ),
               ),
               SizedBox(height: short ? 8 : 14),
-              Text(
+             AnimatedOpacity(opacity: (connected && !core.switchingProxy && !connecting) ? 0.0 : 1.0, duration: const Duration(milliseconds: 450), child:  Text(
                 label,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                   color: connecting ? p.busy : (on ? accent : p.text),
                 ),
-              ),
+              )),
               const SizedBox(height: 8),
               if (connected)
                 Wrap(
