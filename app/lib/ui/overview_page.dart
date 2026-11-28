@@ -1260,9 +1260,9 @@ class _PhoneHome extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
+             GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => showAboutPaniDialog(context), child:  Row(
                 children: [
-                  GestureDetector(onTap: () => showAboutPaniDialog(context), child: const AppLogo(size: 44)),
+                  const AppLogo(size: 44),
                   const SizedBox(width: 8), Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                   Text(
                     l.appTitle,
@@ -1271,7 +1271,7 @@ class _PhoneHome extends StatelessWidget {
                       color: p.text,),),Text('پانی اتصالی امن به دنیای آزاد', style: theme.textTheme.labelSmall?.copyWith(color: p.muted.withValues(alpha: 0.95), fontSize: 13, fontWeight: FontWeight.w500)),]),
                 ],
               
-              ),
+              )),
               const Spacer(),
               SizedBox(height: short ? 4 : 16), Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22), decoration: BoxDecoration(gradient: p.dark ? const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF191C32), Color(0xFF131629)]) : null, color: p.dark ? null : p.card, borderRadius: BorderRadius.circular(24), border: Border.all(color: p.dark ? Colors.white.withValues(alpha: 0.08) : p.cardBorder)), child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min, children: [
               Center(
