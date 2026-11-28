@@ -1869,7 +1869,7 @@ class _HomeDelay extends StatelessWidget {
 /// over wavy contour lines. It stays still: an endless animation redraws the
 /// window every frame, and kept a CPU core busy even with the window hidden
 /// in the tray.
-class _PowerOrb extends StatelessWidget {
+class _PowerOrb extends StatefulWidget {
   const _PowerOrb({
     required this.palette,
     this.scale = 1,
@@ -1897,8 +1897,61 @@ class _PowerOrb extends StatelessWidget {
   final String tooltip;
   final VoidCallback onPressed;
 
-  @override
-  Widget build(BuildContext context) {
+ @override
+State<_PowerOrb> createState() => _PowerOrbState();
+}
+
+class _PowerOrbState extends State<_PowerOrb>
+with SingleTickerProviderStateMixin {
+late final AnimationController _controller;
+
+bool get _isSpinning => widget.busy || widget.connecting;
+
+@override
+void initState() {
+super.initState();
+_controller = AnimationController(
+vsync: this,
+duration: const Duration(milliseconds: 2400),
+);
+if (_isSpinning) {
+_controller.repeat();
+}
+}
+
+@override
+void didUpdateWidget(covariant _PowerOrb oldWidget) {
+super.didUpdateWidget(oldWidget);
+if (_isSpinning) {
+if (!_controller.isAnimating) {
+_controller.repeat();
+}
+} else {
+if (_controller.isAnimating) {
+_controller.stop();
+_controller.value = 0.0;
+}
+}
+}
+
+@override
+void dispose() {
+_controller.dispose();
+super.dispose();
+}
+
+@override
+Widget build(BuildContext context) {
+final palette = widget.palette;
+final scale = widget.scale;
+final autofocus = widget.autofocus;
+final on = widget.on;
+final accent = widget.accent;
+final busy = widget.busy;
+final connecting = widget.connecting;
+final tooltip = widget.tooltip;
+final onPressed = widget.onPressed;
+  
     final p = palette;
     final area = 250.0 * scale;
     final ring = 186.0 * scale;
@@ -1940,50 +1993,68 @@ class _PowerOrb extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              width: ring,
-              height: ring,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: accent.withValues(alpha: on ? 0.55 : 0.28),
-                  width: 1.5,
-                ),
-              ),
-            ),
-            // Connecting can take a while when Mozilla is slow to answer,
-            // so the ring keeps moving to show the wait is expected and
-            // something is still happening.
-            if (busy || connecting) _ConnectingRing(size: ring, color: accent),
+          AnimatedBuilder(
+animation: _controller,
+builder: (context, _) => CustomPaint(
+size: Size.square(ring),
+painter: _FirefoxArcsPainter(
+progress: _controller.value,
+spinning: _isSpinning,
+on: on,
+),
+),
+),
             AnimatedContainer(
               duration: const Duration(milliseconds: 400),
               width: disc,
               height: disc,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: (busy || connecting) ? const [Color(0xFF9059FF), Color(0xFFB833E1)] : on
-                      ? const [Color(0xFFFF7139), Color(0xFFFF4F5E)]
-                      : p.discOff,
-                ),
+             gradient: (on && !busy && !connecting)
+? const RadialGradient(
+colors: [
+Color(0xFFFFB347),
+Color(0xFFFF7139),
+Color(0xFF9059FF),
+],
+stops: [0.0, 0.55, 1.0],
+)
+: LinearGradient(
+begin: Alignment.topLeft,
+end: Alignment.bottomRight,
+colors: (busy || connecting)
+? const [Color(0xFF9059FF), Color(0xFFB833E1)]
+: p.discOff,
+),
                 border: Border.all(
                   color: on
                       ? Colors.white.withValues(alpha: 0.4)
                       : p.discOffEdge,
                   width: 1.5,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: on
-                        ? accent.withValues(alpha: 0.5)
-                        : (p.dark ? Colors.black : const Color(0xFF2A3375))
-                              .withValues(alpha: p.dark ? 0.45 : 0.14),
-                    blurRadius: on ? 36 : 26,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
+              boxShadow: (on && !busy && !connecting)
+? [
+BoxShadow(
+color: const Color(0xFFFF7139).withValues(alpha: 0.55),
+blurRadius: 38,
+spreadRadius: 4,
+),
+BoxShadow(
+color: const Color(0xFF9059FF).withValues(alpha: 0.45),
+blurRadius: 52,
+offset: const Offset(0, 8),
+),
+]
+: [
+BoxShadow(
+color: on
+? accent.withValues(alpha: 0.5)
+: (p.dark ? Colors.black : const Color(0xFF2A3375))
+.withValues(alpha: p.dark ? 0.45 : 0.14),
+blurRadius: on ? 36 : 26,
+offset: const Offset(0, 10),
+),
+],
               ),
               child: Material(
                 type: MaterialType.transparency,
@@ -1992,11 +2063,37 @@ class _PowerOrb extends StatelessWidget {
                 child: InkWell(
                   autofocus: autofocus,
                   onTap: busy ? null : onPressed,
-                  child: Icon(
-                    Icons.power_settings_new_rounded,
-                    size: 58 * scale,
-                    color: on ? Colors.white : (p.dark ? p.muted : p.idle),
-                  ),
+                  child: Stack(
+alignment: Alignment.center,
+children: [
+AnimatedOpacity(
+opacity: (on && !busy && !connecting)
+? 0.96
+: ((busy || connecting) ? 0.25 : 0.12),
+duration: const Duration(milliseconds: 450),
+child: ClipOval(
+child: Transform.scale(
+scale: 1.52,
+child: Image.asset(
+'assets/logo.png',
+width: disc,
+height: disc,
+fit: BoxFit.cover,
+),
+),
+),
+),
+AnimatedOpacity(
+opacity: (on && !busy && !connecting) ? 0.0 : 1.0,
+duration: const Duration(milliseconds: 450),
+child: Icon(
+Icons.power_settings_new_rounded,
+size: 58 * scale,
+color: on ? Colors.white : (p.dark ? p.muted : p.idle),
+),
+),
+],
+),
                 ),
               ),
             ),
@@ -2005,6 +2102,125 @@ class _PowerOrb extends StatelessWidget {
       ),
     );
   }
+}
+
+class _FirefoxArcsPainter extends CustomPainter {
+_FirefoxArcsPainter({
+required this.progress,
+required this.spinning,
+required this.on,
+});
+
+final double progress;
+final bool spinning;
+final bool on;
+
+@override
+void paint(Canvas canvas, Size size) {
+final center = Offset(size.width / 2, size.height / 2);
+final radius = math.min(size.width, size.height) / 2;
+final alpha = (on || spinning) ? 1.0 : 0.65;
+final angleOffset = spinning ? progress * 2 * math.pi : 0.0;
+
+_drawArc(
+canvas,
+center,
+radius,
+baseAngle: -math.pi * 0.72 + angleOffset,
+sweepAngle: math.pi * 1.05,
+maxWidth: size.width * 0.085,
+colors: [
+const Color(0xFFFF4F5E).withValues(alpha: alpha),
+const Color(0xFFFF7139).withValues(alpha: alpha),
+const Color(0xFFFFB347).withValues(alpha: alpha),
+],
+glowColor: const Color(0xFFFF7139).withValues(alpha: 0.55 * alpha),
+);
+
+_drawArc(
+canvas,
+center,
+radius,
+baseAngle: math.pi * 0.28 - angleOffset,
+sweepAngle: math.pi * 1.05,
+maxWidth: size.width * 0.085,
+colors: [
+const Color(0xFF6A32F8).withValues(alpha: alpha),
+const Color(0xFF9059FF).withValues(alpha: alpha),
+const Color(0xFFD946EF).withValues(alpha: alpha),
+],
+glowColor: const Color(0xFF9059FF).withValues(alpha: 0.55 * alpha),
+);
+}
+
+void _drawArc(
+Canvas canvas,
+Offset center,
+double radius, {
+required double baseAngle,
+required double sweepAngle,
+required double maxWidth,
+required List<Color> colors,
+required Color glowColor,
+}) {
+const steps = 48;
+final path = Path();
+final innerPoints = <Offset>[];
+for (var i = 0; i <= steps; i++) {
+final t = i / steps;
+final angle = baseAngle + sweepAngle * t;
+final w = maxWidth * math.sin(math.pi * math.pow(t, 0.75));
+final rOuter = radius + w * 0.55;
+final rInner = radius - w * 0.45;
+final outerPt = Offset(
+center.dx + rOuter * math.cos(angle),
+center.dy + rOuter * math.sin(angle),
+);
+final innerPt = Offset(
+center.dx + rInner * math.cos(angle),
+center.dy + rInner * math.sin(angle),
+);
+if (i == 0) {
+path.moveTo(outerPt.dx, outerPt.dy);
+} else {
+path.lineTo(outerPt.dx, outerPt.dy);
+}
+innerPoints.add(innerPt);
+}
+for (var i = innerPoints.length - 1; i >= 0; i--) {
+path.lineTo(innerPoints[i].dx, innerPoints[i].dy);
+}
+path.close();
+
+final startPt = Offset(
+center.dx + radius * math.cos(baseAngle),
+center.dy + radius * math.sin(baseAngle),
+);
+final endPt = Offset(
+center.dx + radius * math.cos(baseAngle + sweepAngle),
+center.dy + radius * math.sin(baseAngle + sweepAngle),
+);
+final shader = LinearGradient(
+colors: colors,
+).createShader(Rect.fromPoints(startPt, endPt));
+
+final glowPaint = Paint()
+..color = glowColor
+..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+..style = PaintingStyle.fill;
+canvas.drawPath(path, glowPaint);
+
+final fillPaint = Paint()
+..shader = shader
+..style = PaintingStyle.fill;
+canvas.drawPath(path, fillPaint);
+}
+
+@override
+bool shouldRepaint(covariant _FirefoxArcsPainter oldDelegate) =>
+oldDelegate.progress != progress ||
+oldDelegate.spinning != spinning ||
+oldDelegate.on != on;
 }
 
 /// The moving ring shown while the core connects: an arc travelling around
