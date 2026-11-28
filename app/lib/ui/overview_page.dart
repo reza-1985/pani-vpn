@@ -422,7 +422,7 @@ class _DesktopHome extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Center(
+        Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22), decoration: BoxDecoration(gradient: p.dark ? const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF191C32), Color(0xFF131629)]) : null, color: p.dark ? null : p.card, borderRadius: BorderRadius.circular(24), border: Border.all(color: p.dark ? Colors.white.withValues(alpha: 0.08) : p.cardBorder)), child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min, children: [ Center(
           child: _PowerOrb(
             palette: p,
             on: on,
@@ -497,7 +497,7 @@ class _DesktopHome extends StatelessWidget {
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(color: p.muted),
             ),
-          ),
+          ), ]), ),
         if (failure?.code == Failure.unreachable && onOpenConnection != null)
           _ConnectionSettingsButton(onPressed: onOpenConnection!),
         if (failure?.code == Failure.upstreamProxy &&
@@ -739,7 +739,7 @@ class _ModeSwitch extends StatelessWidget {
     final onSelected = this.onSelected;
     Widget option(_Mode m) {
       final chosen = m.value == selected;
-      final color = chosen ? p.text : p.muted;
+      final color = chosen ? Colors.white : p.muted;
       Widget child = InkWell(
         customBorder: const StadiumBorder(),
         onTap: onSelected == null
@@ -785,9 +785,9 @@ class _ModeSwitch extends StatelessWidget {
         opacity: onSelected == null ? 0.6 : 1,
         duration: const Duration(milliseconds: 150),
         child: DecoratedBox(
-          decoration: ShapeDecoration(
-            color: p.card,
-            shape: StadiumBorder(side: BorderSide(color: p.cardBorder)),
+          decoration: BoxDecoration(
+            color: p.dark ? const Color(0xFF191C32) : p.card,
+            borderRadius: BorderRadius.circular(20), border: Border.all(color: p.dark ? Colors.white.withValues(alpha: 0.08) : p.cardBorder),
           ),
           child: Padding(
             padding: const EdgeInsets.all(4),
@@ -812,13 +812,9 @@ class _ModeSwitch extends StatelessWidget {
                           widthFactor: 1 / n,
                           heightFactor: 1,
                           child: DecoratedBox(
-                            decoration: ShapeDecoration(
-                              color: accent.withValues(alpha: 0.2),
-                              shape: StadiumBorder(
-                                side: BorderSide(
-                                  color: accent.withValues(alpha: 0.35),
-                                ),
-                              ),
+                            decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: [Color(0xFF9059FF), Color(0xFFFF7139)]),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                           ),
                         ),
@@ -1005,11 +1001,11 @@ class _HomePalette {
 
   static const night = _HomePalette(
     dark: true,
-    top: Midnight.top,
-    bottom: Midnight.bottom,
+    top: Color(0xFF111322),
+    bottom: Color(0xFF16192E),
     text: Colors.white,
     muted: Midnight.muted,
-    card: Color(0x10FFFFFF),
+    card: Color(0xFF191C32),
     cardBorder: Color(0x14FFFFFF),
     idle: Color(0xFF9059FF),
     connected: Color(0xFFFF7139),
@@ -1249,9 +1245,10 @@ class _PhoneHome extends StatelessWidget {
                       fontSize: 21, fontWeight: FontWeight.w700,
                       color: p.text,),),Text('پانی اتصالی امن به دنیای آزاد', style: theme.textTheme.labelSmall?.copyWith(color: p.muted.withValues(alpha: 0.95), fontSize: 13, fontWeight: FontWeight.w500)),]),
                 ],
+              
               ),
               const Spacer(),
-              SizedBox(height: short ? 4 : 16),
+              SizedBox(height: short ? 4 : 16), Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22), decoration: BoxDecoration(gradient: p.dark ? const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF191C32), Color(0xFF131629)]) : null, color: p.dark ? null : p.card, borderRadius: BorderRadius.circular(24), border: Border.all(color: p.dark ? Colors.white.withValues(alpha: 0.08) : p.cardBorder)), child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min, children: [
               Center(
                 child: _PowerOrb(
                   palette: p,
@@ -1333,7 +1330,7 @@ class _PhoneHome extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(color: p.muted),
                   ),
-                ),
+                ), ]), ),
               // Where to find the proxy, on a line of its own under the delay.
               if (connected && proxyOnly && proxy != null)
                 Padding(
@@ -1778,7 +1775,7 @@ class _HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedBox(
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(20),
       boxShadow: palette.dark
           ? null
           : [
@@ -1792,8 +1789,8 @@ class _HomeCard extends StatelessWidget {
     child: Material(
       color: palette.card,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(22),
-        side: BorderSide(color: palette.cardBorder),
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: palette.dark ? Colors.white.withValues(alpha: 0.08) : palette.cardBorder),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
