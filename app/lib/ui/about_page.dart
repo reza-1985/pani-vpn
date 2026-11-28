@@ -9,6 +9,7 @@ import '../core/updates.dart';
 import '../l10n/app_localizations.dart';
 import '../platform.dart';
 import 'widgets.dart';
+import 'about_pani_dialog.dart';
 
 /// The versions, the update check, the source link, and the data folder.
 class AboutPage extends StatefulWidget {
@@ -221,6 +222,24 @@ class _AboutPageState extends State<AboutPage> {
                 ),
               ],
             ],
+const Divider(height: 24),
+ListTile(
+contentPadding: EdgeInsets.zero,
+leading: const Icon(
+Icons.pets_rounded,
+color: Color(0xFFFF7139),
+),
+title: Text(
+'About Pani',
+style: theme.textTheme.titleSmall,
+),
+subtitle: Text(
+'داستان پانی وی‌پی‌ان',
+style: muted,
+),
+trailing: const Icon(Icons.chevron_right_rounded),
+onTap: () => showAboutPaniDialog(context),
+),
           ),
         ),
       ],
