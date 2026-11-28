@@ -139,6 +139,7 @@ jobs:
           python -c "from PIL import Image; img = Image.open('app/assets/logo.png').convert('RGBA'); img.save('app/windows/runner/resources/app_icon.ico', format='ICO', sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])"
           Copy-Item app/assets/logo.png core/internal/service/web/logo.png -Force
           Copy-Item app/assets/logo.png core/internal/service/web/icon.png -Force
+python -c "from PIL import Image; img = Image.open('app/assets/logo.png').convert('RGBA'); img.save('app/assets/tray/on.ico', format='ICO', sizes=[(16,16),(32,32),(48,48),(64,64)]); img.resize((64,64), Image.LANCZOS).save('app/assets/tray/on.png', optimize=True)"
       - name: Build Windows
         run: ./scripts/build-windows.ps1
       - name: Prepare output files
